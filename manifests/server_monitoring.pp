@@ -23,6 +23,8 @@
 # }
 #
 class newrelic::server_monitoring($newrelic_license_key=undef, $newrelic_loglevel='info', $newrelic_logfile='/var/log/newrelic/nrsysmond.log') {
+  
+  class {'newrelic::repo': }
 
   if $newrelic_license_key == undef {
     fail('The license key associated with your New Relic account must be provided')
@@ -34,6 +36,7 @@ class newrelic::server_monitoring($newrelic_license_key=undef, $newrelic_logleve
 
   package { 'newrelic-sysmond':
     ensure  => present,
+    require => Class['newrelic::repo'],
   }
 
   file { '/etc/newrelic/nrsysmond.cfg':
